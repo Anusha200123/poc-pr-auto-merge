@@ -1,0 +1,26 @@
+name: Auto Create Pull Request
+
+on:
+  push:
+    branches:
+      - 'feature/*'   # Any branch starting with feature/ will trigger PR creation
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: "Automated PR creation"
+          branch: ${{ github.ref_name }}
+          base: dev  # Target branch for PR
+          title: "Auto PR from ${{ github.ref_name }}"
+          body: |
+            This PR was automatically created by GitHub Actions.
+            Source branch: ${{ github.ref_name }}
+
